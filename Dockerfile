@@ -2,11 +2,9 @@ FROM python:3.10.7-slim-buster
 
 WORKDIR /app
 
-COPY src/requirements.txt .
+COPY src/ .
 
 RUN pip3 install -r requirements.txt
-
-COPY src/ .
 
 USER 1001
 
