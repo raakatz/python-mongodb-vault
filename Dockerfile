@@ -1,7 +1,5 @@
 FROM python:3.10.7-slim-buster
 
-#RUN apt update; apt -y install --no-install-recommends default-libmysqlclient-dev build-essential
-
 WORKDIR /app
 
 COPY src/requirements.txt .

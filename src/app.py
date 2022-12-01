@@ -42,17 +42,10 @@ DB password is {DB_PASSWORD}
 ''')
 
 app = Flask(__name__)
-#Make sure svc name
+
 client = MongoClient(f'{NAMESPACE}-mongodb.{NAMESPACE}.svc', 27017, username=DB_USERNAME, password=DB_PASSWORD)
-
-#Change to mongo
-app.config['MYSQL_HOST'] = f'{NAMESPACE}-mysql.{NAMESPACE}.svc'
-app.config['MYSQL_USER'] = DB_USERNAME
-app.config['MYSQL_PASSWORD'] = DB_PASSWORD
-app.config['MYSQL_DB'] = 'my_database'
-
-#Probably not needed
-mysql = MySQL(app)
+db = client.my_database
+users = db.users
 
 @app.route('/')
 @app.route('/register', methods =['GET', 'POST'])
@@ -71,11 +64,8 @@ def register():
         encryption_res = requests.post(f'http://{VAULT_ADDR}:8200/v1/transit/encrypt/my-key', headers={"X-Vault-Token": token}, data={"plaintext": b64_string})
         cipher = encryption_res.json()["data"]["ciphertext"]
 
-        #Change to mongo
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('INSERT INTO users (FirstName, LastName, CreditCard) VALUES (% s, % s, % s)', (FirstName, LastName, cipher, ))
-        mysql.connection.commit()
-        
+        users.insert_one({"FirstName": FirstName, "LastName": LastName, "CreditCard": cipher})
+
         msg = 'You have successfully registered!'
         
     elif request.method == 'POST':

@@ -1,8 +1,6 @@
 mongodb:
   auth:
     rootPassword: "willBeChangedByVault"
-    databases:
-    - my_database
   persistence:
     enabled: false
   arbiter:
@@ -17,10 +15,3 @@ mongodb:
     enabled: false
   startupProbe:
     enabled: false
-  initdbScripts:
-    createdb.sh: |
-      # change to mongo script
-      CREATE TABLE IF NOT EXISTS users (
-        FirstName text,
-        LastName text,
-        CreditCard text
