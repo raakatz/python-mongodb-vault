@@ -1,19 +1,17 @@
-# CHANGE TO MONGO
-
 resource "vault_mount" "db" {
   path = "database"
   type = "database"
 }
 
-resource "vault_database_secret_backend_connection" "mysql" {
+resource "vault_database_secret_backend_connection" "mongodb" {
   backend           = vault_mount.db.path
   name              = "my_database"
   allowed_roles     = ["webapp"]
-  plugin_name       = "mysql-database-plugin"
+  plugin_name       = "mongodb-database-plugin"
   verify_connection = false
 
-  mysql {
-    connection_url = "{{username}}:{{password}}@tcp(myapp-${var.kubernetes_namespace}-mysql.myapp-${var.kubernetes_namespace}.svc:3306)/"
+  mongodb {
+    connection_url = "mongodb://{{username}}:{{password}}@myapp-${var.kubernetes_namespace}-mongodb.myapp-${var.kubernetes_namespace}.svc:27017/admin?tls=false"
     username       = "root"
     password       = "willBeChangedByVault"
   }
@@ -22,8 +20,8 @@ resource "vault_database_secret_backend_connection" "mysql" {
 resource "vault_database_secret_backend_role" "role" {
   backend             = vault_mount.db.path
   name                = "webapp"
-  db_name             = vault_database_secret_backend_connection.mysql.name
-  creation_statements = ["CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT ALL PRIVILEGES ON my_database.* TO '{{name}}'@'%';"]
+  db_name             = vault_database_secret_backend_connection.mongo.name
+  creation_statements = ['{ "db": "my_database", "roles": [{ "role": "readWrite" }] }']
   default_ttl         = 3600
   max_ttl             = 86400
 }
