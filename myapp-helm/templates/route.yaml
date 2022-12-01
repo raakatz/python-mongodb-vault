@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: webapp
+spec:
+  to:
+    kind: Service
+    name: webapp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: ''
+    destinationCACertificate: ''
+  port:
+    targetPort: 5000
+

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webapp
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      serviceAccount: webapp-sa
+      serviceAccountName: webapp-sa
+      containers:
+      - image: "image-registry.openshift-image-registry.svc:5000/images/webapp:1.0"
+        name: webapp
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          name: flask
+        readinessProbe:
+          httpGet:
+            path: /register
+            port: flask
+          periodSeconds: 3
+        env:
+        - name: VAULT_ADDR
+          valueFrom:
+           configMapKeyRef:
+             name: vault-config
+             key: VAULT_ADDR
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
