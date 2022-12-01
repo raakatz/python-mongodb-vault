@@ -21,24 +21,25 @@ Then we will build and deploy our app with its database
 
 We will log into our database and see that the root user exists as well as the application user (its username and password can be found in the application logs)
 
-    CHANGE TO MONGO
+    // fix dynamic pod name and mongo shell
     oc -n myapp exec -it myapp-mysql-0 -- mysql -h myapp-mysql.myapp.svc.cluster.local -uroot -pwillBeChangedByVault
     SELECT user FROM mysql.user;
 
 Then, we will force the rotation of the database root credentials
     
-    export VAULT_ADDR=http://<route>
+    // fix dynamic route command
+    export VAULT_ADDR=http://
     export VAULT_TOKEN=root
     vault write -force database/rotate-root/my_database
 
 And we won't be able to login with the root user anymore
 
-    CHANGE TO MONGO
+    // fix dynamic pod name and mongo shell
     oc -n myapp exec -it myapp-mysql-0 -- mysql -h myapp-mysql.myapp.svc.cluster.local -uroot -pwillBeChangedByVault
 
 We'll use our application to send data to the database, and then login to the database with the application's user and see our data
 
-    CHANGE TO MONGO
+    // fix dynamic route command
     oc -n myapp exec -it myapp-mysql-0 -- mysql -h myapp-mysql.myapp.svc.cluster.local -u<user> -p<password>
     USE my_database;
     SELECT * FROM users;
