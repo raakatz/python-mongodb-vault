@@ -21,28 +21,25 @@ Then we will build and deploy our app with its database
 
 We will log into our database and see that the root user exists as well as the application user (its username and password can be found in the application logs)
 
-    // fix dynamic pod name and mongo shell
-    oc -n myapp exec -it myapp-mysql-0 -- mysql -h myapp-mysql.myapp.svc.cluster.local -uroot -pwillBeChangedByVault
-    SELECT user FROM mysql.user;
+    oc exec -it $(oc get pods -l app.kubernetes.io/component=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u root -p willBeChangedByVault
+    use my_database;
+    db.getUsers();
 
 Then, we will force the rotation of the database root credentials
     
-    // fix dynamic route command
-    export VAULT_ADDR=http://
+    export VAULT_ADDR=http://$(oc get route -o jsonpath="{.items[0].spec.host}")
     export VAULT_TOKEN=root
     vault write -force database/rotate-root/my_database
 
 And we won't be able to login with the root user anymore
 
-    // fix dynamic pod name and mongo shell
-    oc -n myapp exec -it myapp-mysql-0 -- mysql -h myapp-mysql.myapp.svc.cluster.local -uroot -pwillBeChangedByVault
+    oc exec -it $(oc get pods -l app.kubernetes.io/component=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u root -p willBeChangedByVault
 
 We'll use our application to send data to the database, and then login to the database with the application's user and see our data
 
-    // fix dynamic route command
-    oc -n myapp exec -it myapp-mysql-0 -- mysql -h myapp-mysql.myapp.svc.cluster.local -u<user> -p<password>
-    USE my_database;
-    SELECT * FROM users;
+    oc exec -it $(oc get pods -l app.kubernetes.io/component=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u <user> -p <password> --authenticationDatabase my_database
+    use my_database;
+    db.users.find( { } );
 
 To see our decrypted data we'll run the following:
 

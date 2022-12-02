@@ -21,7 +21,7 @@ resource "vault_database_secret_backend_role" "role" {
   backend             = vault_mount.db.path
   name                = "webapp"
   db_name             = vault_database_secret_backend_connection.mongodb.name
-  creation_statements = ['{ "db": "my_database", "roles": [{ "role": "readWrite" }] }']
+  creation_statements = ["{\"db\": \"my_database\", \"roles\": [{\"role\": \"readWrite\"}]}"]
   default_ttl         = 3600
   max_ttl             = 86400
 }

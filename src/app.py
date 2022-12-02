@@ -43,7 +43,7 @@ DB password is {DB_PASSWORD}
 
 app = Flask(__name__)
 
-client = MongoClient(f'{NAMESPACE}-mongodb.{NAMESPACE}.svc', 27017, username=DB_USERNAME, password=DB_PASSWORD)
+client = MongoClient(f'{NAMESPACE}-mongodb.{NAMESPACE}.svc', 27017, username=DB_USERNAME, password=DB_PASSWORD, authSource='my_database')
 db = client.my_database
 users = db.users
 
