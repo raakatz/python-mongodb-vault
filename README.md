@@ -1,11 +1,11 @@
-### INITIALIZE VAULT
+### Initialize Vault
 Run the vault setup script to install Vault and configure it the generate dynamic credentials for our database as well as configure an encryption key that can be used by the application to encrypt data
 
     ./install-vault.sh [ int | prod ]
 
 ### Application Deployment Steps
 
-We will build and deploy our app with its database
+We will deploy our app with its database
     
     helm dependency update myapp-helm
     helm install myapp-int myapp-helm -n myapp-int --set vaultAddress=vault-int.vault-int.svc --create-namespace
