@@ -17,7 +17,7 @@ spec:
       serviceAccount: webapp-sa
       serviceAccountName: webapp-sa
       containers:
-      - image: "image-registry.openshift-image-registry.svc:5000/images/webapp:1.0"
+      - image: "docker.io/raakatz/flask-vault:mongodb"
         name: webapp
         imagePullPolicy: Always
         ports:

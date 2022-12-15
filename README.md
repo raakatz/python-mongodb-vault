@@ -4,18 +4,10 @@ Run the vault setup script to install Vault and configure it the generate dynami
     ./install-vault.sh [ int | prod ]
 
 ### Application Deployment Steps
-We will first prepare our environment
 
-    oc create ns images
-    oc policy add-role-to-group system:image-puller system:serviceaccounts:myapp-int --namespace=images
-    oc policy add-role-to-group system:image-puller system:serviceaccounts:myapp-prod --namespace=images
-    oc registry login
-    helm dependency update myapp-helm
-
-Then we will build and deploy our app with its database
+We will build and deploy our app with its database
     
-    podman build -t default-route-openshift-image-registry.apps-crc.testing/images/webapp:1.0 .
-    podman push default-route-openshift-image-registry.apps-crc.testing/images/webapp:1.0
+    helm dependency update myapp-helm
     helm install myapp-int myapp-helm -n myapp-int --set vaultAddress=vault-int.vault-int.svc --create-namespace
     helm install myapp-prod myapp-helm -n myapp-prod --set vaultAddress=vault-prod.vault-prod.svc --create-namespace
 
