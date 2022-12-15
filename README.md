@@ -1,5 +1,5 @@
 ### Initialize Vault
-Run the vault setup script to install Vault and configure it the generate dynamic credentials for our database as well as configure an encryption key that can be used by the application to encrypt data
+Run the vault setup script to install Vault and configure it to generate dynamic credentials for our database as well as configure an encryption key that can be used by the application to encrypt data
 
     ./install-vault.sh [ int | prod ]
 
