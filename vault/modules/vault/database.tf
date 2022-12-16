@@ -11,7 +11,7 @@ resource "vault_database_secret_backend_connection" "mongodb" {
   verify_connection = false
 
   mongodb {
-    connection_url = "mongodb://{{username}}:{{password}}@myapp-${var.kubernetes_namespace}-mongodb.myapp-${var.kubernetes_namespace}.svc:27017/admin?tls=false"
+    connection_url = "mongodb://{{username}}:{{password}}@myapp-mongodb.myapp-${var.kubernetes_namespace}.svc:27017/admin?tls=false"
     username       = "root"
     password       = "willBeChangedByVault"
   }

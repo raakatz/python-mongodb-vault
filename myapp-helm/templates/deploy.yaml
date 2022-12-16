@@ -34,7 +34,3 @@ spec:
            configMapKeyRef:
              name: vault-config
              key: VAULT_ADDR
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace

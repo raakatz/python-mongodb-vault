@@ -8,7 +8,6 @@ import time
 import os
 
 VAULT_ADDR = os.environ['VAULT_ADDR']
-NAMESPACE = os.environ['NAMESPACE']
 
 with open('/var/run/secrets/kubernetes.io/serviceaccount/token') as f:
     jwt = f.read()
@@ -43,7 +42,7 @@ DB password is {DB_PASSWORD}
 
 app = Flask(__name__)
 
-client = MongoClient(f'{NAMESPACE}-mongodb.{NAMESPACE}.svc', 27017, username=DB_USERNAME, password=DB_PASSWORD, authSource='my_database')
+client = MongoClient(f'myapp-mongodb', 27017, username=DB_USERNAME, password=DB_PASSWORD, authSource='my_database')
 db = client.my_database
 users = db.users
 

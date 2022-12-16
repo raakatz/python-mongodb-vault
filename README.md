@@ -7,9 +7,8 @@ Run the vault setup script to install Vault and configure it to generate dynamic
 
 We will deploy our app with its database
     
-    helm dependency update myapp-helm
-    helm install myapp-int myapp-helm -n myapp-int --set vaultAddress=vault-int.vault-int.svc --create-namespace
-    helm install myapp-prod myapp-helm -n myapp-prod --set vaultAddress=vault-prod.vault-prod.svc --create-namespace
+    oc new-project myapp-int && \
+    helm template myapp myapp-helm --dependency-update -n myapp-int --set vaultAddress=vault.vault-int.svc | oc apply -f -
 
 We will log into our database and see that the root user exists as well as the application user (its username and password can be found in the application logs)
 
@@ -19,7 +18,7 @@ We will log into our database and see that the root user exists as well as the a
 
 Then, we will force the rotation of the database root credentials
     
-    export VAULT_ADDR=http://$(oc get route -o jsonpath="{.items[0].spec.host}")
+    export VAULT_ADDR=http://$(oc -n vault-int get route -o jsonpath="{.items[0].spec.host}")
     export VAULT_TOKEN=root
     vault write -force database/rotate-root/my_database
 
