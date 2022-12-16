@@ -6,6 +6,7 @@ import json
 import base64
 import time
 import os
+import logging
 
 VAULT_ADDR = os.environ['VAULT_ADDR']
 
@@ -41,6 +42,9 @@ DB password is {DB_PASSWORD}
 ''')
 
 app = Flask(__name__)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 client = MongoClient(f'myapp-mongodb', 27017, username=DB_USERNAME, password=DB_PASSWORD, authSource='my_database')
 db = client.my_database
