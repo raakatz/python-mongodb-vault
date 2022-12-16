@@ -33,7 +33,7 @@ And we won't be able to login with the root user anymore
 
     oc exec -it $(oc get pods -l app.kubernetes.io/component=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u root -p willBeChangedByVault
 
-We'll use our application to send data to the database, and then login to the database with the application's user and see our data (get the application's database credentials from its logs)
+We'll use our application to send data to the database, and then login to the database with the application's user and see our data
 
     oc exec -it $(oc get pods -l app.kubernetes.io/component=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u <user> -p <password> --authenticationDatabase my_database
     use my_database;
