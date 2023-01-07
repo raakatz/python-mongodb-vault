@@ -8,7 +8,7 @@ data:
     DB_USERNAME: {{ .Data.data.username }}
     DB_PASSWORD: {{ .Data.data.password }}
     {{ end }}
-  vault-agent-config.hcl |-
+  vault-agent-config.hcl: |-
     pid_file = "./pidfile"
 
     vault {
