@@ -49,10 +49,19 @@ spec:
         env:
         - name: VAULT_ADDR
           value: http://{{ .Values.vaultAddress }}:8200
-        image: docker.io/library/vault
+        - name: SKIP_CHOWN
+          value: "true"
+        - name: SKIP_SETCAP
+          value: "true"
+        - name: HOME
+          value: "/home/vault"
+        image: docker.io/hashicorp/vault
         name: vault-agent
         volumeMounts:
         - mountPath: /etc/vault
           name: config
         - mountPath: /app/secrets
           name: shared-data
+        ports:
+        - containerPort: 8200
+          name: vault

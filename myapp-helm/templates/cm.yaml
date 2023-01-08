@@ -4,15 +4,15 @@ metadata:
   name: vault-agent-config
 data:
   db-env.tmpl: |-
-    {{ with secret "database/creds/webapp" }}
-    DB_USERNAME={{ .Data.data.username }}
-    DB_PASSWORD={{ .Data.data.password }}
-    {{ end }}
+    {{` {{ with secret "database/creds/webapp" }} `}}
+    {{` DB_USERNAME={{ .Data.username }} `}}
+    {{` DB_PASSWORD={{ .Data.password }} `}}
+    {{` {{ end }} `}}
   vault-agent-config.hcl: |-
-    pid_file = "./pidfile"
+    pid_file = "/tmp/pidfile"
 
     vault {
-      address = http://{{ .Values.vaultAddress }}:8200
+      address = "http://{{ .Values.vaultAddress }}:8200"
     }
 
     auto_auth {
@@ -24,7 +24,7 @@ data:
 
       sink "file" {
         config = {
-          path = "./vault-token"
+          path = "/tmp/.vault-token"
         }
       }
     }
